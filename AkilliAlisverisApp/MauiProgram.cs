@@ -56,15 +56,8 @@ public static class MauiProgram
             var httpClient = provider.GetRequiredService<HttpClient>();
             var apiService = new ApiService(httpClient);
 
-            // SecureStorage'dan token al ve Authorization header ekle
-            Task.Run(async () =>
-            {
-                var token = await SecureStorageHelper.GetTokenAsync();
-                if (!string.IsNullOrEmpty(token))
-                {
-                    apiService.AddAuthenticationHeader(token);
-                }
-            }).Wait();
+            // Token yönetimi App.xaml.cs'deki OnStart metoduna taşındığı için burada doğrudan yapılmıyor.
+            // Bu kısım artık ana iş parçacığını bloklamıyor.
 
             return apiService;
         });
@@ -80,7 +73,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<INewsService>(sp => sp.GetRequiredService<ApiService>());
         builder.Services.AddSingleton<ITextService>(sp => sp.GetRequiredService<ApiService>());
         builder.Services.AddSingleton<IApiService, ApiService>();
-        builder.Services.AddSingleton<HttpClient>();
+        // HttpClient zaten yukarıda singleton olarak ekleniyor, bu satır gereksiz
+        // builder.Services.AddSingleton<HttpClient>();
 
         // ApiService'e bağlı olmayan diğer servisler
         builder.Services.AddSingleton<IComplaintService, ComplaintService>();
