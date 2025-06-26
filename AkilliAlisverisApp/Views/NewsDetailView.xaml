@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:AkilliAlisverisApp.Models"
+             xmlns:viewmodels="clr-namespace:AkilliAlisverisApp.ViewModels"
+             x:Class="AkilliAlisverisApp.Views.NewsDetailView"
+             x:DataType="viewmodels:NewsDetailViewModel"
+             Title="{Binding CurrentArticle.Title}">
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+
+            <Label Text="{Binding CurrentArticle.Title}" FontSize="24" FontAttributes="Bold" />
+            <Label Text="{Binding CurrentArticle.PublishedDate, StringFormat='{0:dd MMMM yyyy}'}" FontSize="12" TextColor="Gray"/>
+            <Label Text="{Binding CurrentArticle.Content}" LineBreakMode="WordWrap" FontSize="16" />
+
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="10" Margin="0,15">
+                <HorizontalStackLayout Grid.Column="0" Spacing="5">
+                    <ImageButton Source="like_icon.svg" Command="{Binding LikeArticleCommand}" WidthRequest="24" HeightRequest="24"/>
+                    <Label Text="{Binding CurrentArticle.LikeCount}" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Spacing="5">
+                    <ImageButton Source="dislike_icon.svg" Command="{Binding DislikeArticleCommand}" WidthRequest="24" HeightRequest="24"/>
+                    <Label Text="{Binding CurrentArticle.DislikeCount}" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="2" Spacing="5">
+                    <Image Source="star_icon.svg" WidthRequest="24" HeightRequest="24"/>
+                    <Label Text="{Binding CurrentArticle.AverageRating, StringFormat='{0:F1}'}" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="3" Spacing="5">
+                    <Image Source="comment_icon.svg" WidthRequest="24" HeightRequest="24"/>
+                    <Label Text="{Binding CurrentArticle.CommentCount}" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <BoxView HeightRequest="1" Color="LightGray"/>
+
+            <Label Text="Yorum ve Puan Ekle" FontSize="20" FontAttributes="Bold" Margin="0,10,0,0"/>
+            <Label Text="Puanınız (1-5)" FontSize="14"/>
+            <Slider Minimum="0" Maximum="5" Value="{Binding NewUserRating}" />
+            <Label Text="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NewUserRating, StringFormat='Seçilen Puan: {0:F0}'}" HorizontalOptions="Center"/>
+            <Editor Placeholder="Yorumunuzu buraya yazın..." Text="{Binding NewUserComment}" AutoSize="TextChanges" HeightRequest="100"/>
+            <Button Text="Yorumu Gönder" Command="{Binding SubmitReviewCommand}"/>
+
+            <BoxView HeightRequest="1" Color="LightGray"/>
+
+            <Label Text="Yorumlar" FontSize="20" FontAttributes="Bold" Margin="0,10,0,0"/>
+            <CollectionView ItemsSource="{Binding Reviews}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:NewsReview">
+                        <Frame Margin="0,5" Padding="10" BorderColor="Gainsboro">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding UserFullName}" FontAttributes="Bold"/>
+                                <Label Text="{Binding Rating, StringFormat='Puan: {0}/5'}" TextColor="Orange"/>
+                                <Label Text="{Binding Comment}" Margin="0,5,0,0"/>
+                                <Label Text="{Binding PostedDate, StringFormat='{0:g}'}" FontSize="11" TextColor="Gray" HorizontalOptions="End"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <Label Text="Bu haber için henüz yorum yapılmamış." Margin="20" HorizontalOptions="Center"/>
+                </CollectionView.EmptyView>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

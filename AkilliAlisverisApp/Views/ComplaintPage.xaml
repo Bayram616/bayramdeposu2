@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:AkilliAlisverisApp.ViewModels"
+             xmlns:models="clr-namespace:AkilliAlisverisApp.Models"
+             xmlns:mct="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
+             x:Class="AkilliAlisverisApp.Views.ComplaintPage"
+             Title="Şikayet ve Öneri"
+             x:DataType="viewmodels:ComplaintViewModel">
+
+    <ContentPage.Behaviors>
+        <mct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding LoadComplaintsCommand}" />
+    </ContentPage.Behaviors>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <Button Text="Şikayetim Var"
+                    Command="{Binding NavigateToComplaintInsertCommand}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Start"
+                    Margin="0,0,0,20"/>
+
+            <Label Text="Kullanıcılardan Şikayetler" FontSize="Title" FontAttributes="Bold" />
+            <Label Text="Dikkat! Buradaki şikayetler ürün veya hizmeti kullanan kişiler tarafından 'bağımsızca ve tarafsızca' gönderilmektedir." FontSize="Caption" FontAttributes="Italic" />
+
+            <CollectionView ItemsSource="{Binding ComplaintGroups}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:ComplaintGroup">
+                        <VerticalStackLayout Spacing="5" Margin="0,0,0,15">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding CategoryName}" FontSize="Medium" FontAttributes="Bold" VerticalOptions="Center"/>
+                                <Button Text="Tümünü Gör" Grid.Column="1" Style="{StaticResource TextButton}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ComplaintViewModel}}, Path=NavigateToCategoryPageCommand}" 
+                                        CommandParameter="{Binding CategoryName}"/>
+                            </Grid>
+
+                            <CollectionView ItemsSource="{Binding .}" HeightRequest="150" ItemsLayout="HorizontalList">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:Complaint">
+                                        <Border StrokeShape="RoundRectangle 10" Padding="10" Margin="5" WidthRequest="180" HeightRequest="140"
+                                                Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}"
+                                                StrokeThickness="1">
+                                            <VerticalStackLayout Spacing="5">
+                                                <Image Source="{Binding ImageUrl}" Aspect="AspectFill" HeightRequest="80" WidthRequest="160"/>
+                                                <Label Text="{Binding Subject}" FontAttributes="Bold" MaxLines="1" LineBreakMode="TailTruncation"/>
+                                                <Label Text="{Binding Content}" MaxLines="2" LineBreakMode="TailTruncation" FontSize="Small"/>
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

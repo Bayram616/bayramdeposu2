@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
+             xmlns:vm="clr-namespace:AkilliAlisverisApp.ViewModels"
+             x:Class="AkilliAlisverisApp.Views.RegisterPage"
+             Title="Kayıt Ol">
+
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="15">
+            <Entry Placeholder="Kullanıcı Adı" Text="{Binding UserName}" />
+            <Entry Placeholder="E-posta" Keyboard="Email" Text="{Binding Email}" />
+
+            <Entry Placeholder="Şifre" IsPassword="True" Text="{Binding Password}" />
+            <Entry Placeholder="Şifre Tekrarı" IsPassword="True" Text="{Binding ConfirmPassword}" />
+            <Entry Placeholder="Ad Soyad" Text="{Binding FullName}" />
+            <Entry Placeholder="Telefon Numarası" Keyboard="Telephone" Text="{Binding PhoneNumber}" />
+            <DatePicker Date="{Binding BirthDate}" MaximumDate="{x:Static sys:DateTime.Today}" />
+            <Picker Title="Cinsiyet" 
+                ItemsSource="{Binding Genders}" 
+                SelectedItem="{Binding Gender}" />
+
+            <Picker Title="Şehir" ItemsSource="{Binding Cities}" ItemDisplayBinding="{Binding CityName}" SelectedItem="{Binding SelectedCity}" />
+            <Picker Title="İlçe" ItemsSource="{Binding Districts}" ItemDisplayBinding="{Binding DistrictName}" SelectedItem="{Binding SelectedDistrict}" />
+            <Picker Title="Mahalle" ItemsSource="{Binding Neighborhoods}" ItemDisplayBinding="{Binding NeighborhoodName}" SelectedItem="{Binding SelectedNeighborhood}" />
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+                <CheckBox IsChecked="{Binding IsMembershipAgreementAccepted}" />
+                <Label VerticalOptions="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Üyelik Sözleşmesi'ni " TextColor="Blue" TextDecorations="Underline">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ShowMembershipAgreementCommand}" />
+                                </Span.GestureRecognizers>
+                            </Span>
+                            <Span Text="okudum ve kabul ediyorum." />
+
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+                <CheckBox IsChecked="{Binding IsKVKKAgreementAccepted}" />
+                <Label VerticalOptions="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="KVKK Aydınlatma Metni'ni " TextColor="Blue" TextDecorations="Underline">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ShowKVKKAgreementCommand}" />
+                                </Span.GestureRecognizers>
+                            </Span>
+                            <Span Text="okudum ve kabul ediyorum." />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+
+            <Button Text="Kayıt Ol"
+                    Command="{Binding RegisterCommand}"
+                    IsEnabled="{Binding IsRegisterEnabled}" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
